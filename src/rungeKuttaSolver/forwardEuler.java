@@ -2,6 +2,8 @@ package rungeKuttaSolver;
 
 import java.util.ArrayList;
 
+import differentialEquations.DifferentialEquation;
+
 public class forwardEuler 
 {
 	public double[] y_values;

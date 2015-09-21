@@ -1,4 +1,4 @@
-package rungeKuttaSolver;
+package differentialEquations;
 
 public interface DifferentialEquation
 {

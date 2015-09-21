@@ -1,4 +1,5 @@
-package rungeKuttaSolver;
+package differentialEquations;
+
 
 public class Exp_DE implements DifferentialEquation 
 {
