@@ -16,6 +16,11 @@ public class RungeKutta
 	
 	public RungeKutta(double[][] A, double[] b, double[] c) throws IOException
 	{
+		this(A,b,c,null);
+	}
+
+	public RungeKutta(double[][] A, double[] b, double[] c , DifferentialEquation equation) throws IOException
+	{
 		//check dimensions
 		if(c.length != A[0].length || b.length != A.length || c.length != b.length)
 			throw new IOException("RungeKutta Intialization Error: Dimensions of A,b,c incompatible");
@@ -32,6 +37,7 @@ public class RungeKutta
 		this.A = A;
 		this.b = b;
 		this.c = c;
+		this.equation = equation;
 	}
 	
 	public void run(double y_0, double t_0, double t_end, double stepSize)
@@ -86,7 +92,7 @@ public class RungeKutta
 	public double[][] getA() {
 		return A;
 	}
-	public double[] getB1() {
+	public double[] getB() {
 		return b;
 	}
 	public DifferentialEquation getEquation() {
