@@ -1,15 +1,15 @@
-package rungeKuttaSolver;
+package solvers;
 
 import java.util.ArrayList;
 
 import differentialEquations.DifferentialEquation;
 
-public class forwardEuler 
+public class ForwardEuler 
 {
 	public double[] y_values;
 	public double[] t_values;
 	DifferentialEquation function;
-	public forwardEuler(DifferentialEquation function)
+	public ForwardEuler(DifferentialEquation function)
 	{
 		this.function = function;
 	}

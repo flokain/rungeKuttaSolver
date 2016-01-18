@@ -1,30 +1,26 @@
-package rungeKuttaSolver;
+package rungeKutta;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Vector;
-
-import org.jblas.DoubleMatrix;
 
 import differentialEquations.DifferentialEquation;
 
-public class rungeKutta
+public class RungeKutta
 {
 	private double[] c;
 	private double[][] A;
-	private double[] b; 
+	private double[] b;
 	private DifferentialEquation equation;
 	
 	private double[][] y_values;
 	private double[] t_values;
 	
-	public rungeKutta(double[][] A, double[] b, double[] c) throws IOException
+	public RungeKutta(double[][] A, double[] b, double[] c) throws IOException
 	{
 		//check dimensions
 		if(c.length != A[0].length || b.length != A.length || c.length != b.length)
 			throw new IOException("RungeKutta Intialization Error: Dimensions of A,b,c incompatible");
 
-		//check conditions for b : sum(b_i)=1 
+		//check conditions for b1 and b2 : sum(b_i)=1 
 		double sum = 0;
 		
 		for (int i = 0; i < b.length;i++) 
@@ -90,7 +86,7 @@ public class rungeKutta
 	public double[][] getA() {
 		return A;
 	}
-	public double[] getB() {
+	public double[] getB1() {
 		return b;
 	}
 	public DifferentialEquation getEquation() {

@@ -3,8 +3,8 @@ package examples;
 
 import java.io.IOException;
 
-import rungeKuttaSolver.forwardEuler;
-import rungeKuttaSolver.rungeKutta;
+import rungeKutta.RungeKutta;
+import solvers.ForwardEuler;
 
 import com.xeiam.xchart.BitmapEncoder;
 import com.xeiam.xchart.BitmapEncoder.BitmapFormat;
@@ -25,14 +25,14 @@ public class testPlot {
 		 double t_end = 10;
 		 
 		 DifferentialEquation equation = new Exp_DE(lambda);
-		 forwardEuler solver = new forwardEuler(equation);
+		 ForwardEuler solver = new ForwardEuler(equation);
 		 solver.run(y_0, t_0, t_end, stepSize);	
 		 
 		 //forward euler
 		 double[][] A = new double[][]{{0}};
 		 double[] b = new double[]{1};
 		 double[] c = new double[]{1};
-		 rungeKutta solver2 = new rungeKutta(A, b, c);
+		 RungeKutta solver2 = new RungeKutta(A, b, c);
 		 solver2.setEquation(equation);
 		 solver2.run(y_0, t_0, t_end, stepSize);
 		 
@@ -41,7 +41,7 @@ public class testPlot {
 				 			{1		,0	}};
 		 b = new double[]{0.5,0.5};
 		 c = new double[]{0,1};
-		 rungeKutta solver3 = new rungeKutta(A, b, c);
+		 RungeKutta solver3 = new RungeKutta(A, b, c);
 		 
 		 solver3.setEquation(equation);
 		 solver3.run(y_0, t_0, t_end, stepSize);
@@ -53,7 +53,7 @@ public class testPlot {
 				 			{0,		0,		1,		0	}};
 		 b = new double[]	{1./6	,2./6,	2./6,	1./6};
 		 c = new double[]	{0		,0.5,	0.5,	1};
-		 rungeKutta solver4 = new rungeKutta(A, b, c);
+		 RungeKutta solver4 = new RungeKutta(A, b, c);
 		 
 		 solver4.setEquation(equation);
 		 solver4.run(y_0, t_0, t_end, stepSize);
