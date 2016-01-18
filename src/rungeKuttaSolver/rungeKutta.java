@@ -13,7 +13,7 @@ public class rungeKutta
 	private double[] c;
 	private double[][] A;
 	private double[] b; 
-	private DifferentialEquation function;
+	private DifferentialEquation equation;
 	
 	private double[][] y_values;
 	private double[] t_values;
@@ -44,15 +44,15 @@ public class rungeKutta
 	}
 	
 	public void run(double[] y_0, double t_0, double t_end, double stepSize)
-	{
-		int stepsCount = (int)((t_end-t_0)/stepSize + 1);
+	{ 
+		int stepsCount = (int)(Math.abs((t_end-t_0)/stepSize + 1));
 		int s = b.length;
 
 		y_values = new double[stepsCount][y_0.length];
 		t_values = new double[stepsCount];
 		t_values[0] = t_0;
 		y_values[0] = y_0;
-		double h = stepSize;
+		double h = Math.signum(t_end-t_0)*stepSize;
 		
 		for (int i = 0; i< stepsCount-1 ; i++)
 		{
@@ -69,7 +69,7 @@ public class rungeKutta
 					temp = sum(temp,mul(A[j][m],k[m]));
 				}
 				
-				k[j] = function.calculate(t+c[j]*h, sum(y,mul(h,temp))) ;
+				k[j] = equation.calculate(t+c[j]*h, sum(y,mul(h,temp))) ;
 				y_values[i+1] = sum(y_values[i+1],mul(b[j],k[j]));	
 			}
 			t_values[i+1] =  t_values[i]+h;
@@ -78,32 +78,23 @@ public class rungeKutta
 	}	
 
 	
-	public void setFunction(DifferentialEquation function)
+	public void setEquation(DifferentialEquation equation)
 	{
-		this.function = function;
+		this.equation = equation;
 	}
 	
-
 	public double[] getC() {
 		return c;
 	}
-	public void setC(double[] c) {
-		this.c = c;
-	}
+	
 	public double[][] getA() {
 		return A;
-	}
-	public void setA(double[][] a) {
-		A = a;
 	}
 	public double[] getB() {
 		return b;
 	}
-	public void setB(double[] b) {
-		this.b = b;
-	}
-	public DifferentialEquation getFunction() {
-		return function;
+	public DifferentialEquation getEquation() {
+		return equation;
 	}
 	public double[][] getY_values() {
 		return y_values;

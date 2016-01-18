@@ -33,7 +33,7 @@ public class testPlot {
 		 double[] b = new double[]{1};
 		 double[] c = new double[]{1};
 		 rungeKutta solver2 = new rungeKutta(A, b, c);
-		 solver2.setFunction(equation);
+		 solver2.setEquation(equation);
 		 solver2.run(y_0, t_0, t_end, stepSize);
 		 
 		 //Heun
@@ -43,10 +43,10 @@ public class testPlot {
 		 c = new double[]{0,1};
 		 rungeKutta solver3 = new rungeKutta(A, b, c);
 		 
-		 solver3.setFunction(equation);
+		 solver3.setEquation(equation);
 		 solver3.run(y_0, t_0, t_end, stepSize);
 
-		 //RK4 (Simpson
+		 //RK4 (Simpson)
 		 A = new double[][]{{0,		0,		0,		0	},
 				 			{0.5,	0,		0,		0	},
 				 			{0,		0.5,	0,		0	},
@@ -55,7 +55,7 @@ public class testPlot {
 		 c = new double[]	{0		,0.5,	0.5,	1};
 		 rungeKutta solver4 = new rungeKutta(A, b, c);
 		 
-		 solver4.setFunction(equation);
+		 solver4.setEquation(equation);
 		 solver4.run(y_0, t_0, t_end, stepSize);
 		 
 		 double[] xData = solver.t_values;
@@ -67,10 +67,10 @@ public class testPlot {
 		 double[] xData4 = solver4.getT_values();
 		 double[] yData4 = solver4.getY_values(0);
 		    // Create Chart
-		    Chart chart = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData, yData);
-		    Chart chart2 = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData2, yData2);
-		    Chart chart3 = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData3, yData3);
-		    Chart chart4 = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData4, yData4); 
+		    Chart chart = QuickChart.getChart("forward euler from class", "X", "Y", "y' = -27 * y Stepsize= 0.1", xData, yData);
+		    Chart chart2 = QuickChart.getChart("forward euler", "X", "Y", "y' = -27 * y Stepsize= 0.1", xData2, yData2);
+		    Chart chart3 = QuickChart.getChart("Heun", "X", "Y", "y' = -27 * y Stepsize= 0.1", xData3, yData3);
+		    Chart chart4 = QuickChart.getChart("RK4 (Simpson)", "X", "Y", "y' = -27 * y Stepsize= 0.1", xData4, yData4); 
 		    // Show it
 		    new SwingWrapper(chart).displayChart();
 		    new SwingWrapper(chart2).displayChart();
