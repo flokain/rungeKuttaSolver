@@ -47,16 +47,21 @@ public class RungeKutta
 	
 	public void run(double[] y_0, double t_0, double t_end, double stepSize)
 	{ 
-		int stepsCount = (int)(Math.abs((t_end-t_0)/stepSize + 1));
+		int stepsCount = (int) Math.floor( Math.abs( (t_end-t_0)/stepSize) );
+		if (Math.abs(stepsCount) < 1) 
+		{
+			stepsCount = 1;
+			stepSize = Math.abs(t_end-t_0);
+		}
 		int s = b.length;
 
-		y_values = new double[stepsCount][y_0.length];
-		t_values = new double[stepsCount];
+		y_values = new double[stepsCount+1][y_0.length];
+		t_values = new double[stepsCount+1];
 		t_values[0] = t_0;
 		y_values[0] = y_0;
 		double h = Math.signum(t_end-t_0)*stepSize;
 		
-		for (int i = 0; i< stepsCount-1 ; i++)
+		for (int i = 0; i< stepsCount; i++)
 		{
 			double t = t_values[i]; 
 			double y[] = y_values[i];

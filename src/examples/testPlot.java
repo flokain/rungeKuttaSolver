@@ -3,8 +3,8 @@ package examples;
 
 import java.io.IOException;
 
+import rungeKutta.EmbeddedRungeKutta;
 import rungeKutta.RungeKutta;
-import solvers.ForwardEuler;
 
 import com.xeiam.xchart.BitmapEncoder;
 import com.xeiam.xchart.BitmapEncoder.BitmapFormat;
@@ -25,8 +25,10 @@ public class testPlot {
 		 double t_end = 10;
 		 
 		 DifferentialEquation equation = new Exp_DE(lambda);
-		 ForwardEuler solver = new ForwardEuler(equation);
-		 solver.run(y_0, t_0, t_end, stepSize);	
+		 
+		 //Dorman_Prince
+		 EmbeddedRungeKutta solver = new EmbeddedRungeKutta("ode45",equation);
+		 solver.run(y_0, t_0, t_end);	
 		 
 		 //forward euler
 		 double[][] A = new double[][]{{0}};
@@ -51,6 +53,7 @@ public class testPlot {
 				 			{0.5,	0,		0,		0	},
 				 			{0,		0.5,	0,		0	},
 				 			{0,		0,		1,		0	}};
+		 
 		 b = new double[]	{1./6	,2./6,	2./6,	1./6};
 		 c = new double[]	{0		,0.5,	0.5,	1};
 		 RungeKutta solver4 = new RungeKutta(A, b, c);
@@ -58,16 +61,18 @@ public class testPlot {
 		 solver4.setEquation(equation);
 		 solver4.run(y_0, t_0, t_end, stepSize);
 		 
-		 double[] xData = solver.t_values;
-		 double[] yData = solver.y_values;
+		 // get plot data
+		 double[] xData = solver.getT_values();
+		 double[] yData = solver.getY_values(0);
 		 double[] xData2 = solver2.getT_values();
 		 double[] yData2 = solver2.getY_values(0);
 		 double[] xData3 = solver3.getT_values();
 		 double[] yData3 = solver3.getY_values(0);
 		 double[] xData4 = solver4.getT_values();
 		 double[] yData4 = solver4.getY_values(0);
+		 
 		    // Create Chart
-		    Chart chart = QuickChart.getChart("forward euler from class", "X", "Y", "y' = -27 * y Stepsize= 0.1", xData, yData);
+		    Chart chart = QuickChart.getChart("Dormand_Prince", "X", "Y", "y' = -27 * y relative tolerance= 1e-3", xData, yData);
 		    Chart chart2 = QuickChart.getChart("forward euler", "X", "Y", "y' = -27 * y Stepsize= 0.1", xData2, yData2);
 		    Chart chart3 = QuickChart.getChart("Heun", "X", "Y", "y' = -27 * y Stepsize= 0.1", xData3, yData3);
 		    Chart chart4 = QuickChart.getChart("RK4 (Simpson)", "X", "Y", "y' = -27 * y Stepsize= 0.1", xData4, yData4); 
