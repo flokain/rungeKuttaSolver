@@ -13,6 +13,6 @@ public class Exp_DE implements DifferentialEquation
 	@Override
 	public double[] calculate(double t,double[] y)
 	{
-		return new double[]{lambda*y[0]};	//exp(lambda*t) solves y'= y*t				
+		return new double[]{lambda*y[0]};	// a * exp(lambda*t) solves y'= y*lambda				
 	}
 }

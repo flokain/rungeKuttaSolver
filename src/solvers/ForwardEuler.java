@@ -1,5 +1,6 @@
 package solvers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import differentialEquations.DifferentialEquation;
@@ -13,7 +14,7 @@ public class ForwardEuler
 	{
 		this.function = function;
 	}
-	public void run(double y_0, double t_0, double t_end, double stepSize)
+	public void run(double y_0, double t_0, double t_end, double stepSize) throws IOException
 	{
 		int stepsCount = (int)((t_end-t_0)/stepSize + 1);
 		

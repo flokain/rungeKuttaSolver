@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import rungeKutta.EmbeddedRungeKutta;
 import rungeKutta.RungeKutta;
+import rungeKutta.Solver;
 
 import com.xeiam.xchart.BitmapEncoder;
 import com.xeiam.xchart.BitmapEncoder.BitmapFormat;
@@ -14,20 +15,21 @@ import com.xeiam.xchart.SwingWrapper;
 
 import differentialEquations.DifferentialEquation;
 import differentialEquations.Exp_DE;
+import differentialEquations.Sin_DE;
 
-public class testPlot {
+public class TestsSeries {
 	 public static void main(String[] args) throws IOException
 	 {
 		 double t_0 = 0;
 		 double lambda = -27;
-		 double y_0 = 1;
-		 double stepSize = 0.1;
-		 double t_end = 10;
+		 double[] y_0 = new double[] {1, 0};
+		 double stepSize = 0.001;
+		 double t_end = 1;
 		 
-		 DifferentialEquation equation = new Exp_DE(lambda);
+		 DifferentialEquation equation = new Sin_DE(1);
 		 
 		 //Dorman_Prince
-		 EmbeddedRungeKutta solver = new EmbeddedRungeKutta("ode45",equation);
+		 Solver solver = new EmbeddedRungeKutta("ode45",equation);
 		 solver.run(y_0, t_0, t_end);	
 		 
 		 //forward euler
@@ -62,6 +64,8 @@ public class testPlot {
 		 solver4.run(y_0, t_0, t_end, stepSize);
 		 
 		 // get plot data
+		 new Plot(solver);
+		 
 		 double[] xData = solver.getT_values();
 		 double[] yData = solver.getY_values(0);
 		 double[] xData2 = solver2.getT_values();

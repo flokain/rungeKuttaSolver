@@ -3,14 +3,11 @@ package rungeKutta;
 import java.io.IOException;
 import differentialEquations.DifferentialEquation;
 
-public class EmbeddedRungeKutta {
+public class EmbeddedRungeKutta extends Solver{
 	
 	RungeKutta leadRK;
 	RungeKutta controlRK;
 	int order;
-	
-	private double[][] y;
-	private double[] t;
 	
 	public EmbeddedRungeKutta(double[][] A, double[] b_lead, double[] b_control, double[] c, DifferentialEquation equation) throws IOException
 	{
@@ -101,34 +98,33 @@ public class EmbeddedRungeKutta {
 	}
 	
 	//solver
-	public void run(double[] y_0, double t_0, double t_end, double stepSize_min, double tolerance ,double propability, double deltaStepsize_min, double stepSize_start) throws IOException
+	public void run(double[] y_0, double t_0, double t_end, double stepSize_min, double tolerance ,double propability, double deltaStepsize_max, double stepSize_start) throws IOException
 	{
 		if ( Math.abs(stepSize_start) > Math.abs(t_end-t_0) )
 			throw new IOException("Stepsize for the start is to big, choose it smaller than t_end-t_0");
 		
 		int y_size = y_0.length;
 		
-		t = new double[1];
-		y = new double[1][y_size];
+		t_values = new double[1];
+		y_values = new double[1][y_size];
 		
-		t[0] = t_0;
-		y[0] = y_0;
+		t_values[0] = t_0;
+		y_values[0] = y_0;
 		
 		double h = stepSize_start;
-		int order = leadRK.getB().length;
 		
-		int s = 0; //last index <=> y.length-1
-		while( t[s] < t_end)
+		int s = 0; //last index <=> y_values.length-1
+		while( t_values[s] < t_end)
 		{
-			leadRK.run(y[s], t[s], t[s]+h, h);
+			leadRK.run(y_values[s], t_values[s], t_values[s]+h, h);
 			double[] lead_y = leadRK.getY_values()[1];
 			
-			controlRK.run(y[s], t[s], t[s]+h, h);
+			controlRK.run(y_values[s], t_values[s], t_values[s]+h, h);
 			double[] control_y = controlRK.getY_values()[1];
 
-			double estimatedError = h * this.calcRelError(y[s],lead_y,control_y,1e-3); 
+			double estimatedError = this.calcRelError(y_values[s],lead_y,control_y,1e-3); 
 			
-			if( estimatedError / h <= tolerance || h <= stepSize_min) // tolerance or minimal stepSize reached => accept solution, make a step
+			if( estimatedError/h <= tolerance || h <= stepSize_min) // tolerance or minimal stepSize reached => accept solution, make a step
 			{	
 				s = s+1;
 				double[][] y_tmp = new double[s+1][y_size];
@@ -136,29 +132,29 @@ public class EmbeddedRungeKutta {
 				
 				for( int i = 0; i<s;i++)
 				{
-					t_tmp[i] = t[i];
-					y_tmp[i] = y[i];
+					t_tmp[i] = t_values[i];
+					y_tmp[i] = y_values[i];
 				}
-				y = y_tmp;
-				t = t_tmp;
+				y_values = y_tmp;
+				t_values = t_tmp;
 				
-				y[s] = lead_y;
-				t[s] = t[s-1]+h;
+				y_values[s] = lead_y;
+				t_values[s] = t_values[s-1]+h;
 				
-			  /* //Code from script Melenk
+			   //Code from script Melenk
 				 h = Math.max( stepSize_min, 
 							  Math.min( deltaStepsize_max * h, 
 									    propability * Math.pow( (tolerance/estimatedError * Math.pow(h,order) ), order-1) ) );
-			  */
+			  
 				//code from matlab ode45
-				h = Math.max( stepSize_min, 
+				/*h = Math.max( stepSize_min, 
 						  			h * Math.max( deltaStepsize_min, 
 						  							propability * Math.pow(tolerance/estimatedError, 1./order) 
 						  						) 
 						  	);
-				
-				if( t[s]+h > t_end)
-					h= t_end-t[s];
+				*/
+				if( t_values[s]+h > t_end)
+					h= t_end-t_values[s];
 			}
 			else // estimated Error was to big, try again at same y,t with smaller stepSize
 			{
@@ -168,24 +164,18 @@ public class EmbeddedRungeKutta {
 		}
 	}
 
-	public void run(double[] y_0, double t_0, double t_end, double stepSize_min, double tolerance ,double propability, double deltaStepsize_min) throws IOException
+	public void run(double[] y_0, double t_0, double t_end, double stepSize_min, double tolerance ,double propability, double deltaStepsize_max) throws IOException
 	{
-		run(y_0, t_0, t_end, stepSize_min, tolerance, propability, deltaStepsize_min, guessFirstStep(y_0,t_0, t_end, stepSize_min, tolerance, propability));
+		run(y_0, t_0, t_end, stepSize_min, tolerance, propability, deltaStepsize_max, guessFirstStep(y_0,t_0, t_end, stepSize_min, tolerance, propability));
 	}
 	public void run(double[] y_0, double t_0, double t_end) throws IOException
 	{
-		// stepSize_min = 1e-16;    //precision of double
+		// stepSize_min = 1e-16;    // precision of double
 		// deltaStepsize_max = 0.1; // matlab ode45
 		// tolerance = 1e-3; 		// matlab ode45
 		// propability = 0.8;		// matlab ode45
-		run(y_0, t_0, t_end, 1e-16, 1e-3, 0.8, 0.1, guessFirstStep(y_0,t_0, t_end, 1e-16, 1e-3, 0.8));
+		run(y_0, t_0, t_end, 1e-16, 1e-3, 0.8, 2, guessFirstStep(y_0,t_0, t_end, 1e-16, 1e-3, 0.8));
 	}
-
-	public void run(double y_0, double t_0, double t_end) throws IOException
-	{
-		run(new double[]{y_0}, t_0, t_end);
-	}
-	
 	
 	// Setter
 	public void setEquation(DifferentialEquation equation)
@@ -195,21 +185,8 @@ public class EmbeddedRungeKutta {
 	}
 	
 	//Geter
-	public double[][] getY_values() {
-		return y;
-	}
-	public double[] getY_values(int i) throws IOException {
-		if( i >= y[0].length || i < 0)
-			throw new IOException("Solver GetY_value error: index exceeds array");
-		
-		double[] y_ = new double[y.length];
-		for( int j = 0; j < y_.length; j++)
-			y_[j]= y[j][i];
-		
-		return y_;
-	}
-	public double[] getT_values() {
-		return t;
+	public DifferentialEquation getEquation() {
+		return leadRK.getEquation();
 	}
 	
 	// Internal functions
@@ -233,12 +210,13 @@ public class EmbeddedRungeKutta {
 		double[] yDiff = this.diff(y_lead, y_control);
 		
 		for (int i = 0; i < y.length; i++)
-			c = Math.max(c, yDiff[i] / Math.max( Math.max( Math.abs(y_lead[i]) , Math.abs(y[i]) ),absTolerance) );
+			c= Math.max(c, Math.abs(yDiff[i]));
+			//c = Math.max(c, Math.abs(yDiff[i]) / Math.max( Math.max( Math.abs(y_lead[i]) , Math.abs(y[i]) ),absTolerance) );
 		
 		return c;
 	}
 
-	private double guessFirstStep(double[] y_0, double t_0,double t_end, double stepSize_min, double tolerance, double propability)
+	private double guessFirstStep(double[] y_0, double t_0,double t_end, double stepSize_min, double tolerance, double propability) throws IOException
 	{
 		double[] dy = leadRK.getEquation().calculate(t_0, y_0);
 		double rh = 0;

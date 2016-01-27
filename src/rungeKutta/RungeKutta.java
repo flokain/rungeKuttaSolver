@@ -4,15 +4,13 @@ import java.io.IOException;
 
 import differentialEquations.DifferentialEquation;
 
-public class RungeKutta
+public class RungeKutta extends Solver
 {
 	private double[] c;
 	private double[][] A;
 	private double[] b;
 	private DifferentialEquation equation;
-	
-	private double[][] y_values;
-	private double[] t_values;
+
 	
 	public RungeKutta(double[][] A, double[] b, double[] c) throws IOException
 	{
@@ -40,12 +38,12 @@ public class RungeKutta
 		this.equation = equation;
 	}
 	
-	public void run(double y_0, double t_0, double t_end, double stepSize)
+	public void run(double y_0, double t_0, double t_end, double stepSize) throws IOException
 	{
 		this.run(new double[]{y_0}, t_0 ,t_end ,stepSize);
 	}
 	
-	public void run(double[] y_0, double t_0, double t_end, double stepSize)
+	public void run(double[] y_0, double t_0, double t_end, double stepSize) throws IOException
 	{ 
 		int stepsCount = (int) Math.floor( Math.abs( (t_end-t_0)/stepSize) );
 		if (Math.abs(stepsCount) < 1) 
@@ -84,6 +82,10 @@ public class RungeKutta
 		}
 	}	
 
+	public void run(double[] y_0, double t_0, double t_end) throws IOException
+	{
+		run(y_0,  t_0,  t_end, (t_end-t_0)/10);
+	}
 	
 	public void setEquation(DifferentialEquation equation)
 	{
@@ -103,23 +105,6 @@ public class RungeKutta
 	public DifferentialEquation getEquation() {
 		return equation;
 	}
-	public double[][] getY_values() {
-		return y_values;
-	}
-	public double[] getY_values(int i) throws IOException {
-		if( i >= y_values[0].length || i < 0)
-			throw new IOException("Solver GetY_value error: index exceeds array");
-		
-		double[] y = new double[y_values.length];
-		for( int j = 0; j < y.length; j++)
-			y[j]= y_values[j][i];
-		
-		return y;
-	}
-	public double[] getT_values() {
-		return t_values;
-	}
-
 	
 	private double[] sum(double[]a,double[]b)
 	{
