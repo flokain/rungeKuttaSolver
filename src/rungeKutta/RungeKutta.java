@@ -84,7 +84,7 @@ public class RungeKutta extends Solver
 
 	public void run(double[] y_0, double t_0, double t_end) throws IOException
 	{
-		run(y_0,  t_0,  t_end, (t_end-t_0)/10);
+		run(y_0,  t_0,  t_end, (t_end-t_0)/1000);
 	}
 	
 	public void setEquation(DifferentialEquation equation)
@@ -102,7 +102,9 @@ public class RungeKutta extends Solver
 	public double[] getB() {
 		return b;
 	}
-	public DifferentialEquation getEquation() {
+	public DifferentialEquation getEquation() throws IOException {
+		
+		if (equation == null) throw new IOException("Equation not set");
 		return equation;
 	}
 	

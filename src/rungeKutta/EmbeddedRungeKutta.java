@@ -5,6 +5,10 @@ import differentialEquations.DifferentialEquation;
 
 public class EmbeddedRungeKutta extends Solver{
 	
+	public enum Methods {
+		DORMAND_PRINCE
+	}
+	
 	RungeKutta leadRK;
 	RungeKutta controlRK;
 	int order;
@@ -32,7 +36,7 @@ public class EmbeddedRungeKutta extends Solver{
 		controlRK = new RungeKutta(A, b_control, c, equation);
 	}
 		
-	public EmbeddedRungeKutta(String method, DifferentialEquation equation) throws IOException
+	public EmbeddedRungeKutta(Methods method, DifferentialEquation equation) throws IOException
 	{
 		double[] c = null;
 		double[] b_lead = null;
@@ -40,8 +44,7 @@ public class EmbeddedRungeKutta extends Solver{
 		double[][] A = null;
 		switch (method)
 		{
-			case "Dormand–Prince":
-			case "ode45":
+			case DORMAND_PRINCE:
 			{
 				this.order = 5;
 				
@@ -92,7 +95,8 @@ public class EmbeddedRungeKutta extends Solver{
 		/*-------------END standard constructor END-------------*/
 	}
 
-	public EmbeddedRungeKutta(String method) throws IOException
+	
+	public EmbeddedRungeKutta(Methods method) throws IOException
 	{
 		this(method,null);
 	}
@@ -185,7 +189,7 @@ public class EmbeddedRungeKutta extends Solver{
 	}
 	
 	//Geter
-	public DifferentialEquation getEquation() {
+	public DifferentialEquation getEquation() throws IOException{
 		return leadRK.getEquation();
 	}
 	

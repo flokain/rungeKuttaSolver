@@ -14,14 +14,12 @@ import com.xeiam.xchart.QuickChart;
 import com.xeiam.xchart.SwingWrapper;
 
 import differentialEquations.DifferentialEquation;
-import differentialEquations.Exp_DE;
 import differentialEquations.Sin_DE;
 
 public class TestsSeries {
 	 public static void main(String[] args) throws IOException
 	 {
 		 double t_0 = 0;
-		 double lambda = -27;
 		 double[] y_0 = new double[] {1, 0};
 		 double stepSize = 0.001;
 		 double t_end = 1;
@@ -29,7 +27,7 @@ public class TestsSeries {
 		 DifferentialEquation equation = new Sin_DE(1);
 		 
 		 //Dorman_Prince
-		 Solver solver = new EmbeddedRungeKutta("ode45",equation);
+		 Solver solver = new EmbeddedRungeKutta(EmbeddedRungeKutta.Methods.DORMAND_PRINCE,equation);
 		 solver.run(y_0, t_0, t_end);	
 		 
 		 //forward euler

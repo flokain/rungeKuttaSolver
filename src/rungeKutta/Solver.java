@@ -22,6 +22,17 @@ public abstract class Solver {
 		
 		return y;
 	}
+	public double[][] getY_values(int[] i) throws IOException {
+		
+		double[][]  y = new double[i.length][y_values[0].length];
+		
+		for (int j = 0; j < i.length; j++)
+		{
+			y[j] = getY_values(i[j]);
+		}		
+		return y;
+	}
+	
 	public double[] getT_values() {
 		return t_values;
 	}
@@ -36,5 +47,8 @@ public abstract class Solver {
 	 }
 	 
 	 public void setEquation(DifferentialEquation equation) { }
-	 public DifferentialEquation getEquation() {return null;}
+	 public DifferentialEquation getEquation() throws IOException 
+	 {
+		 throw new IOException("Equation not set");
+	 }
 }
