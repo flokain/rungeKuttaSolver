@@ -7,11 +7,11 @@ import rungeKutta.EmbeddedRungeKutta;
 import rungeKutta.RungeKutta;
 import rungeKutta.Solver;
 
-import com.xeiam.xchart.BitmapEncoder;
-import com.xeiam.xchart.BitmapEncoder.BitmapFormat;
-import com.xeiam.xchart.Chart;
-import com.xeiam.xchart.QuickChart;
-import com.xeiam.xchart.SwingWrapper;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.BitmapEncoder.BitmapFormat;
+import org.knowm.xchart.internal.chartpart.Chart;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.SwingWrapper;
 
 import differentialEquations.DifferentialEquation;
 import differentialEquations.Sin_DE;

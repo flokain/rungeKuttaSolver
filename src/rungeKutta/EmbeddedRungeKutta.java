@@ -145,11 +145,13 @@ public class EmbeddedRungeKutta extends Solver{
 				y_values[s] = lead_y;
 				t_values[s] = t_values[s-1]+h;
 				
-			   //Code from script Melenk
-				 h = Math.max( stepSize_min, 
-							  Math.min( deltaStepsize_max * h, 
-									    propability * Math.pow( (tolerance/estimatedError * Math.pow(h,order) ), order-1) ) );
-			  
+				//Code from script Melenk
+				//step proposal:
+				h = propability * Math.pow( tolerance * (Math.pow(h,order) / estimatedError), 1/(order-1));
+				
+				// apply restrictions:
+			    h = Math.max( stepSize_min, Math.min( deltaStepsize_max,h));
+		
 				//code from matlab ode45
 				/*h = Math.max( stepSize_min, 
 						  			h * Math.max( deltaStepsize_min, 
